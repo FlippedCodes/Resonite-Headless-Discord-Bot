@@ -3,6 +3,8 @@ services:
     build:
       context: ./
     restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
       DCtoken: ${DISCORD_BOT_TOKEN}
 
