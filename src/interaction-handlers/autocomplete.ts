@@ -1,5 +1,3 @@
-import { ps } from 'docker-compose';
-
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 
 import { get } from '../lib/docker';
