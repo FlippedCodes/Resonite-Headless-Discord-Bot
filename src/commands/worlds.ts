@@ -1,0 +1,64 @@
+import { Command } from '@sapphire/framework';
+import {
+  bold,
+  EmbedBuilder,
+  InteractionContextType,
+  type APIEmbedField,
+  type RestOrArray,
+} from 'discord.js';
+import { getActiveWorlds } from '../lib/resoniteCli';
+
+export class RestartCommand extends Command {
+  public constructor(context: Command.LoaderContext, options: Command.Options) {
+    super(context, {
+      ...options,
+      description: 'Gets all open worlds on selected headless.',
+    });
+  }
+
+  public override registerApplicationCommands(registry: Command.Registry) {
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .setContexts([InteractionContextType.Guild])
+          .addStringOption((option) =>
+            option
+              .setName('headlessname')
+              .setDescription('Which headless do you want to see the open worlds on?')
+              .setAutocomplete(true)
+              .setRequired(true)
+          ),
+      { idHints: ['1432110124419514509'] }
+    );
+  }
+
+  public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+    await interaction.deferReply();
+    const response = await getActiveWorlds(interaction.options.getString('headlessname', true));
+    if (!response.successful) {
+      const text = `Getting Worlds Failed!\nResponse: ${response.response}`;
+      await interaction.editReply(text);
+      throw new Error(text);
+    }
+    if (!(response.worlds && response.worlds.length !== 0))
+      return interaction.editReply(
+        'There are currently no open worlds.\nMaybe this headless is currently restarting?\n-# But this command also sometimes fails so try re-running it.'
+      );
+    const prettyFields = response.worlds?.map((world) => {
+      return {
+        name: world.sessionName,
+        value: `
+${bold('Access Level')}: ${world.accessLevel}
+${bold('Users')}: ${world.activeUsers} (${world.users - 1})
+${bold('Max Users')}: ${world.maxUsers}
+`,
+      };
+    }) as RestOrArray<APIEmbedField>;
+    const embed = new EmbedBuilder()
+      .addFields(...prettyFields)
+      .setFooter({ text: 'Headless user is not counted.' });
+    return interaction.editReply({ embeds: [embed] });
+  }
+}
