@@ -20,7 +20,7 @@ export async function get() {
 export async function restart(containerId: string) {
   const responseRaw = await fetch(`${dockerEndpoint}${containerId}/restart`, {
     method: 'POST',
-    unix: '/var/run/docker.sock',
+    unix: unixEndpoint,
   });
   return responseRaw;
 }
@@ -49,7 +49,7 @@ export async function attach(containerId: string, command: string, rerun: boolea
     })}`,
     {
       method: 'POST',
-      unix: '/var/run/docker.sock',
+      unix: unixEndpoint,
       body: streamSend,
     }
   );
@@ -65,7 +65,7 @@ export async function attach(containerId: string, command: string, rerun: boolea
     `${dockerEndpoint}${containerId}/logs?${new URLSearchParams({ stdout: 'true', tail: '30' })}`,
     {
       method: 'GET',
-      unix: '/var/run/docker.sock',
+      unix: unixEndpoint,
     }
   );
   if (!(logResponse.ok && logResponse.status === 200 && logResponse.body !== null))
