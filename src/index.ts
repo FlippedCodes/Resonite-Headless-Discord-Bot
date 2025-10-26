@@ -5,7 +5,7 @@ import {
   container,
 } from '@sapphire/framework';
 
-import { GatewayIntentBits, Partials } from 'discord.js';
+import { GatewayIntentBits } from 'discord.js';
 
 const client = new SapphireClient({
   intents: [
@@ -27,4 +27,4 @@ if (process.env.NODE_ENV === 'development')
 
 // discord connect
 await client.login(process.env.DCtoken);
-console.log(client.user?.displayName);
+console.log('Username:', client.user?.displayName);
