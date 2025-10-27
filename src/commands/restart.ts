@@ -24,7 +24,7 @@ export class RestartCommand extends Command {
               .setAutocomplete(true)
               .setRequired(true)
           ),
-      { idHints: ['1421507374233161748'] }
+      { idHints: ['1421507374233161748', '1432161106373378223'] }
     );
   }
 
