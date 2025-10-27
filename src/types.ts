@@ -19,7 +19,7 @@ export type container = {
   Command: string;
   Created: number;
   Ports: string[];
-  Labels: { [key: string]: string; managedByResoniteBot: string };
+  Labels: { [key: string]: string; discordBot: string, discordBotAccessRole: string };
   State: 'exited' | 'created' | 'running';
   Status: string;
   HostConfig: { [key: string]: string };

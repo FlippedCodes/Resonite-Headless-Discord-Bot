@@ -7,6 +7,7 @@ import {
   type RestOrArray,
 } from 'discord.js';
 import { getActiveWorlds } from '../lib/resoniteCli';
+import { get } from '../lib/docker';
 
 export class RestartCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -36,7 +37,14 @@ export class RestartCommand extends Command {
 
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
     await interaction.deferReply();
-    const response = await getActiveWorlds(interaction.options.getString('headlessname', true));
+    const containerId = interaction.options.getString('headlessname', true);
+    const containerAll = await get(containerId);
+    if (containerAll.length === 0) return interaction.editReply(`Restart Failed!\nLost container reference.`);
+    const container = containerAll[0]
+    if (container!.Labels.discordBotAccessRole)
+      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole)) return interaction.editReply(`Restart Failed!\nYou don't have permissions on that headless.`);
+
+    const response = await getActiveWorlds(containerId);
     if (!response.successful) {
       const text = `Getting Worlds Failed!\nResponse: ${response.response}`;
       await interaction.editReply(text);

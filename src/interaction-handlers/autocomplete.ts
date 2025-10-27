@@ -25,10 +25,17 @@ export class AutocompleteHandler extends InteractionHandler {
 
     const headlessContainers = await get();
     return this.some(
-      headlessContainers.map((container) => ({
-        name: `${container.Names[0]?.replace('/', '')} | ${container.Status}`,
-        value: container.Id,
-      }))
+      headlessContainers
+        // check if user is allowed
+        .filter((container) =>
+          container.Labels.discordBotAccessRole
+            ? interaction.member?.roles.cache.has(container.Labels.discordBotAccessRole)
+            : true
+        )
+        .map((container) => ({
+          name: `${container.Names[0]?.replace('/', '')} | ${container.Status}`,
+          value: container.Id,
+        }))
     );
   }
 }

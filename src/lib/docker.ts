@@ -5,7 +5,7 @@ import type { container, responseResoniteWorlds } from '../types';
 const dockerEndpoint = 'http://localhost/v1.51/containers/';
 const unixEndpoint = '/var/run/docker.sock';
 
-export async function get() {
+export async function get(containerId?: string) {
   const allContainersRaw = await fetch(
     `${dockerEndpoint}json?${new URLSearchParams({ all: 'true' })}`,
     {
@@ -14,7 +14,8 @@ export async function get() {
     }
   );
   const allContainers = (await allContainersRaw.json()) as container[];
-  return allContainers.filter((container) => container.Labels.managedByResoniteBot === 'true');
+  if (containerId) return allContainers.filter((container) => container.Id === containerId);
+  return allContainers.filter((container) => container.Labels.discordBot === 'true');
 }
 
 export async function restart(containerId: string) {
