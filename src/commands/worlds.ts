@@ -41,8 +41,9 @@ export class RestartCommand extends Command {
     const containerAll = await get(containerId);
     if (containerAll.length === 0) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
     const container = containerAll[0]
-    if (container!.Labels.discordBotAccessRole)
-      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole)) return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
+    if (!container) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
+    if (container.Labels.discordBotAccessRole)
+      if (!interaction.member?.roles.cache.has(container.Labels.discordBotAccessRole)) return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
 
     const response = await getActiveWorlds(containerId);
     if (!response.successful) {
@@ -59,13 +60,14 @@ export class RestartCommand extends Command {
         name: world.sessionName,
         value: `
 ${bold('Access Level')}: ${world.accessLevel}
-${bold('Users')}: ${world.activeUsers} (${world.users - 1})
-${bold('Max Users')}: ${world.maxUsers}
+${bold('Users')}: ${world.activeUsers} (${world.users - 1}) / ${world.maxUsers}
 `,
       };
     }) as RestOrArray<APIEmbedField>;
     const embed = new EmbedBuilder()
       .addFields(...prettyFields)
+      .setAuthor({ name: container.Names[0]!.replace('/', '') })
+      .setTitle('Active Sessions')
       .setFooter({ text: 'Headless user is not counted.' });
     return interaction.editReply({ embeds: [embed] });
   }
