@@ -39,10 +39,10 @@ export class RestartCommand extends Command {
     await interaction.deferReply();
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
-    if (containerAll.length === 0) return interaction.editReply(`Restart Failed!\nLost container reference.`);
+    if (containerAll.length === 0) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
     const container = containerAll[0]
     if (container!.Labels.discordBotAccessRole)
-      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole)) return interaction.editReply(`Restart Failed!\nYou don't have permissions on that headless.`);
+      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole)) return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
 
     const response = await getActiveWorlds(containerId);
     if (!response.successful) {
