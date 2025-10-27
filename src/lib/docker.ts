@@ -60,7 +60,7 @@ export async function attach(containerId: string, command: string, rerun: boolea
       response: sendCommandResponse.statusText,
     } as responseResoniteWorlds;
   // timeout needed due to race condition with stream
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await new Promise((resolve) => setTimeout(resolve, 600));
 
   const logResponse = await fetch(
     `${dockerEndpoint}${containerId}/logs?${new URLSearchParams({ stdout: 'true', tail: '30' })}`,
