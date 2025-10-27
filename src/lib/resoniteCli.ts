@@ -3,7 +3,6 @@ import { attach } from './docker';
 
 export async function getActiveWorlds(containerId: string) {
   let output = await attach(containerId, 'worlds');
-  console.log(output.response, '\n#############################');
   
   if (!(output.successful)) return output;
   // FIXME: This is a hack in response to unreliable docker command stream

@@ -63,7 +63,7 @@ export async function attach(containerId: string, command: string, rerun: boolea
   await new Promise((resolve) => setTimeout(resolve, 600));
 
   const logResponse = await fetch(
-    `${dockerEndpoint}${containerId}/logs?${new URLSearchParams({ stdout: 'true', tail: '30' })}`,
+    `${dockerEndpoint}${containerId}/logs?${new URLSearchParams({ stdout: 'true', tail: '70' })}`,
     {
       method: 'GET',
       unix: unixEndpoint,
