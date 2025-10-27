@@ -1,5 +1,5 @@
 import { Command } from '@sapphire/framework';
-import { InteractionContextType } from 'discord.js';
+import { InteractionContextType, MessageFlags } from 'discord.js';
 import { get, restart } from '../lib/docker';
 
 export class RestartCommand extends Command {
@@ -29,13 +29,17 @@ export class RestartCommand extends Command {
   }
 
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
-    if (containerAll.length === 0) return interaction.editReply(`Restart Failed!\nLost container reference.`);
-    const container = containerAll[0]
+    if (containerAll.length === 0)
+      return interaction.editReply(`Restart Failed!\nLost container reference.`);
+    const container = containerAll[0];
     if (container!.Labels.discordBotAccessRole)
-      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole)) return interaction.editReply(`Restart Failed!\nYou don't have permissions on that headless.`); 
+      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole))
+        return interaction.editReply(
+          `Restart Failed!\nYou don't have permissions on that headless.`
+        );
     const restartReplyRaw = await restart(containerId);
     if (!(restartReplyRaw.ok && restartReplyRaw.status === 204))
       return interaction.editReply(`Restart Failed!\nStatus-Code: ${restartReplyRaw.status}`);

@@ -3,6 +3,7 @@ import {
   bold,
   EmbedBuilder,
   InteractionContextType,
+  MessageFlags,
   type APIEmbedField,
   type RestOrArray,
 } from 'discord.js';
@@ -36,7 +37,7 @@ export class RestartCommand extends Command {
   }
 
   public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
     if (containerAll.length === 0) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
