@@ -26,11 +26,11 @@ export async function getActiveWorlds(containerId: string) {
       const users = activeUsers[0]?.split('Users: ');
       if (!users || !users.length) return null;
       
-      const sessionName = users[0]?.split('] ');
-      if (!sessionName || !sessionName.length) return null;
+      const sessionName = users[0]?.replace(/\[\d*\]/g, '').trim();
+      if (!sessionName) return null;
       
       return {
-        sessionName: sessionName[1]?.trim() || 'Failed to Parse',
+        sessionName: sessionName || 'Failed to Parse',
         users: parseInt(users[1] || '-1'),
         activeUsers: parseInt(activeUsers[1] || '-1'),
         maxUsers: parseInt(maxUsers[1] || '-1'),
