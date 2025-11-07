@@ -33,7 +33,7 @@ export class TickrateCommand extends Command {
               .setDescription('What tickrate do you want to set the headless on?')
               .setRequired(true)
           ),
-      { idHints: ['1436170716805464186'] }
+      { idHints: ['1436170716805464186', '1436177225358508153'] }
     );
   }
 
