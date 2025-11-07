@@ -40,3 +40,8 @@ export type responseResoniteWorlds = {
     accessLevel: accessLevel;
   }[];
 };
+
+export type responseDefaultCommand = {
+  successful: boolean;
+  response: string;
+};

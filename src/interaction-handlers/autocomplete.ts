@@ -21,7 +21,7 @@ export class AutocompleteHandler extends InteractionHandler {
 
   public override async parse(interaction: AutocompleteInteraction) {
     // TODO: name restart dynamic with class call
-    if (!['restart', 'worlds'].includes(interaction.command?.name!)) return this.none();
+    if (!['restart', 'worlds', 'tickrate'].includes(interaction.command?.name!)) return this.none();
 
     const headlessContainers = await get();
     return this.some(
