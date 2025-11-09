@@ -2,7 +2,6 @@ import {
   SapphireClient,
   ApplicationCommandRegistries,
   LogLevel,
-  container,
 } from '@sapphire/framework';
 
 import { GatewayIntentBits } from 'discord.js';
