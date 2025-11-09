@@ -1,0 +1,10 @@
+{
+  "headless": {
+    "global": {
+      "tickrateRange": {
+        "min": 60,
+        "max": 120
+      }
+    }
+  }
+}

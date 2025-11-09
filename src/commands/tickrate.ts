@@ -2,6 +2,7 @@ import { Command } from '@sapphire/framework';
 import { GuildMember, InteractionContextType, MessageFlags } from 'discord.js';
 import { setTickrate } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
+import config from '../../config.json';
 
 export class TickrateCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -28,8 +29,8 @@ export class TickrateCommand extends Command {
           .addNumberOption((option) => 
             option
               .setName('tickrate')
-              .setMaxValue(120)
-              .setMinValue(30)
+              .setMaxValue(config.headless.global.tickrateRange.max)
+              .setMinValue(config.headless.global.tickrateRange.min)
               .setDescription('What tickrate do you want to set the headless on?')
               .setRequired(true)
           ),
