@@ -87,7 +87,7 @@ export async function refreshScheduledEvents(guild: Guild) {
 
           return {
             name,
-            value: `${ongoingLabel}> ${event.description?.replaceAll('\n', '\n> ')}`,
+            value: `${ongoingLabel}${event.description ? `> ${event.description.replaceAll('\n', '\n> ')}` : ''}`,
           };
           // filter out events that have been consolidated
         })
