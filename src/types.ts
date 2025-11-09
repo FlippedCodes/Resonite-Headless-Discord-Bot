@@ -1,9 +1,3 @@
-// type sonething = {
-//   anyObject: object,
-//   labels: {[key:string]: string},
-//   definedObject: {value: string, value2: number}
-// }
-
 export type accessLevel =
   | 'Anyone'
   | 'RegisteredUsers'
@@ -11,7 +5,7 @@ export type accessLevel =
   | 'Private'
   | 'Contacts';
 
-export type container = {
+  export type container = {
   Id: string;
   Names: string[];
   Image: string;
