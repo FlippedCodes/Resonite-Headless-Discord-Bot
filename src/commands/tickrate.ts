@@ -3,6 +3,7 @@ import { GuildMember, InteractionContextType, MessageFlags } from 'discord.js';
 import { setTickrate } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
 import config from '../../config.json';
+import { commandLog } from '../lib/discordLogging';
 
 export class TickrateCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -46,20 +47,28 @@ export class TickrateCommand extends Command {
     if (!container) return interaction.editReply(`Setting tickrate failed!\nLost container reference.`);
     if (container.Labels.discordBotAccessRole) {
       const guildMember = interaction.member as GuildMember;
-      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole))
+      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) {
+        commandLog('failed', container.Labels.discordBotLogChannel, interaction);
         return interaction.editReply(
           `Setting tickrate failed!\nYou don't have permissions on that headless.`
         );
+      }
     }
     const tickrate = interaction.options.getNumber('tickrate', true);
     const response = await setTickrate(containerId, tickrate);
     if (!response.successful) {
-      const text = `Setting tickrate failed!\nResponse: ${response.response}`;
-      await interaction.editReply(text);
-      throw new Error(text);
+      const err = `Setting tickrate failed!\nResponse: ${response.response}`;
+      commandLog('error', container.Labels.discordBotLogChannel, interaction, err);
+      await interaction.editReply(err);
+      throw new Error(err);
     }
-    if (!response.response.includes('Tick Rate Set!'))
-      return interaction.editReply('Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Try again later...');
-    return interaction.editReply('Tick Rate Set!');
+    const confirmMessage = 'Tick Rate Set!';
+    if (!response.response.includes(confirmMessage)) {
+      const err = 'Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Please try again...'
+      commandLog('error', container.Labels.discordBotLogChannel, interaction, err);
+      return interaction.editReply(err);
+    }
+    commandLog('success', container.Labels.discordBotLogChannel, interaction, confirmMessage);
+    return interaction.editReply(confirmMessage);
   }
 }

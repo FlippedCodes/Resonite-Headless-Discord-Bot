@@ -10,6 +10,7 @@ import {
 } from 'discord.js';
 import { getActiveWorlds } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
+import { commandLog } from '../lib/discordLogging';
 
 export class RestartCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -43,21 +44,27 @@ export class RestartCommand extends Command {
     const containerAll = await get(containerId);
     const container = containerAll[0]
     if (!container) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
+    const guildMember = interaction.member as GuildMember;
     if (container.Labels.discordBotAccessRole) {
-      const guildMember = interaction.member as GuildMember;
-      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
+      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) {
+        commandLog('failed', container.Labels.discordBotLogChannel, interaction);
+        return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
+      }
     }
 
     const response = await getActiveWorlds(containerId);
     if (!response.successful) {
-      const text = `Getting Worlds Failed!\nResponse: ${response.response}`;
-      await interaction.editReply(text);
-      throw new Error(text);
+      const err = `Getting Worlds Failed!\nResponse: ${response.response}`;
+      commandLog('error', container.Labels.discordBotLogChannel, interaction, err);
+      await interaction.editReply(err);
+      throw new Error(err);
     }
-    if (!(response.worlds && response.worlds.length !== 0))
+    if (!(response.worlds && response.worlds.length !== 0)) {
+      commandLog('error', container.Labels.discordBotLogChannel, interaction, 'No open worlds.');
       return interaction.editReply(
         'There are currently no open worlds.\nMaybe this headless is currently restarting?\n-# But this command also sometimes fails so try re-running it.'
       );
+    }
     const prettyFields = response.worlds?.map((world) => {
       return {
         name: world.sessionName,
@@ -72,6 +79,7 @@ ${bold('Users')}: ${world.activeUsers} (${world.users - 1}) / ${world.maxUsers}
       .setAuthor({ name: container.Names[0]!.replace('/', '') })
       .setTitle('Active Sessions')
       .setFooter({ text: 'Headless user is not counted.' });
+    commandLog('success', container.Labels.discordBotLogChannel, interaction, 'Requested world status.');
     return interaction.editReply({ embeds: [embed] });
   }
 }

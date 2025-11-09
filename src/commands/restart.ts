@@ -1,6 +1,7 @@
 import { Command } from '@sapphire/framework';
 import { GuildMember, InteractionContextType, MessageFlags } from 'discord.js';
 import { get, restart } from '../lib/docker';
+import { commandLog } from '../lib/discordLogging';
 
 export class RestartCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -36,14 +37,20 @@ export class RestartCommand extends Command {
     if (!container) return interaction.editReply(`Restart Failed!\nLost container reference.`);
     if (container.Labels.discordBotAccessRole) {
       const guildMember = interaction.member as GuildMember;
-      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole))
+      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) {
+        commandLog('failed', container.Labels.discordBotLogChannel, interaction);
         return interaction.editReply(
           `Restart Failed!\nYou don't have permissions on that headless.`
         );
+      }
     }
     const restartReplyRaw = await restart(containerId);
-    if (!(restartReplyRaw.ok && restartReplyRaw.status === 204))
-      return interaction.editReply(`Restart Failed!\nStatus-Code: ${restartReplyRaw.status}`);
+    if (!(restartReplyRaw.ok && restartReplyRaw.status === 204)) {
+      const err = `Restart Failed!\nStatus-Code: ${restartReplyRaw.status}`;
+      commandLog('error', container.Labels.discordBotLogChannel, interaction, err);
+      return interaction.editReply(err);
+    }
+    commandLog('success', container.Labels.discordBotLogChannel, interaction, 'Restart issued.');
     return interaction.editReply(`Restart issued!\nPlease wait for headless restart...`);
   }
 }
