@@ -13,7 +13,8 @@ export type accessLevel =
   Command: string;
   Created: number;
   Ports: string[];
-  Labels: { [key: string]: string; discordBot: string, discordBotAccessRole: string };
+  // Labels: { [key: string]: string | null; discordBot: string, discordBotAccessRole: string, discordBotLogChannel: string | null };
+  Labels: { discordBot: string, discordBotAccessRole: string, discordBotLogChannel: string | null };
   State: 'exited' | 'created' | 'running';
   Status: string;
   HostConfig: { [key: string]: string };
