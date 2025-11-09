@@ -57,7 +57,8 @@ export async function commandLog(
   }
   const embed = new EmbedBuilder()
     .setTitle(interaction.commandName? `/${interaction.commandName}` : 'Unknown command')
-    .setDescription(`${description}\n\nReason: ${customMessage || 'Not specified'}`)
+    .setDescription(description)
+    .addFields([{name: 'Reason', value: customMessage || 'Not specified'}])
     .setColor(color)
     .setTimestamp();
   logChannel.send({ embeds: [embed] });
