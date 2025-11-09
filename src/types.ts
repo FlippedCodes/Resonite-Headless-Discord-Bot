@@ -5,7 +5,9 @@ export type accessLevel =
   | 'Private'
   | 'Contacts';
 
-  export type container = {
+export type logSuccessType = 'error' | 'failed' | 'success';
+
+export type container = {
   Id: string;
   Names: string[];
   Image: string;
