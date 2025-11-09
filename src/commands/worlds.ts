@@ -41,7 +41,6 @@ export class RestartCommand extends Command {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
-    if (containerAll.length === 0) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
     const container = containerAll[0]
     if (!container) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
     if (container.Labels.discordBotAccessRole) {

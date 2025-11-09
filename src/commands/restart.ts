@@ -32,12 +32,11 @@ export class RestartCommand extends Command {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
-    if (containerAll.length === 0)
-      return interaction.editReply(`Restart Failed!\nLost container reference.`);
     const container = containerAll[0];
-    if (container!.Labels.discordBotAccessRole) {
+    if (!container) return interaction.editReply(`Restart Failed!\nLost container reference.`);
+    if (container.Labels.discordBotAccessRole) {
       const guildMember = interaction.member as GuildMember;
-      if (!guildMember.roles.cache.has(container!.Labels.discordBotAccessRole))
+      if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole))
         return interaction.editReply(
           `Restart Failed!\nYou don't have permissions on that headless.`
         );
