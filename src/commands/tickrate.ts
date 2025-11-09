@@ -58,9 +58,8 @@ export class TickrateCommand extends Command {
       await interaction.editReply(text);
       throw new Error(text);
     }
-    if (!response.response.includes('Tick Rate Set!')) {
+    if (!response.response.includes('Tick Rate Set!'))
       return interaction.editReply('Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Try again later...');
-    }
     return interaction.editReply('Tick Rate Set!');
   }
 }
