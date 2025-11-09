@@ -2,7 +2,7 @@ import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework
 
 import { get } from '../lib/docker';
 
-import type { AutocompleteInteraction } from 'discord.js';
+import type { AutocompleteInteraction, GuildMember } from 'discord.js';
 
 export class AutocompleteHandler extends InteractionHandler {
   public constructor(ctx: InteractionHandler.LoaderContext, options: InteractionHandler.Options) {
@@ -24,12 +24,13 @@ export class AutocompleteHandler extends InteractionHandler {
     if (!['restart', 'worlds', 'tickrate'].includes(interaction.command?.name!)) return this.none();
 
     const headlessContainers = await get();
+    const guildMember = interaction.member as GuildMember;
     return this.some(
       headlessContainers
         // check if user is allowed
         .filter((container) =>
           container.Labels.discordBotAccessRole
-            ? interaction.member?.roles.cache.has(container.Labels.discordBotAccessRole)
+            ? guildMember.roles.cache.has(container.Labels.discordBotAccessRole)
             : true
         )
         .map((container) => ({

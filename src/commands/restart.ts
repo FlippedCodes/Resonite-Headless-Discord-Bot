@@ -1,5 +1,5 @@
 import { Command } from '@sapphire/framework';
-import { InteractionContextType, MessageFlags } from 'discord.js';
+import { GuildMember, InteractionContextType, MessageFlags } from 'discord.js';
 import { get, restart } from '../lib/docker';
 
 export class RestartCommand extends Command {
@@ -35,11 +35,13 @@ export class RestartCommand extends Command {
     if (containerAll.length === 0)
       return interaction.editReply(`Restart Failed!\nLost container reference.`);
     const container = containerAll[0];
-    if (container!.Labels.discordBotAccessRole)
-      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole))
+    if (container!.Labels.discordBotAccessRole) {
+      const guildMember = interaction.member as GuildMember;
+      if (!guildMember.roles.cache.has(container!.Labels.discordBotAccessRole))
         return interaction.editReply(
           `Restart Failed!\nYou don't have permissions on that headless.`
         );
+    }
     const restartReplyRaw = await restart(containerId);
     if (!(restartReplyRaw.ok && restartReplyRaw.status === 204))
       return interaction.editReply(`Restart Failed!\nStatus-Code: ${restartReplyRaw.status}`);

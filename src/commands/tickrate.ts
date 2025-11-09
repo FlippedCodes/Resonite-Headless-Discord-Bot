@@ -1,5 +1,5 @@
 import { Command } from '@sapphire/framework';
-import { InteractionContextType, MessageFlags } from 'discord.js';
+import { GuildMember, InteractionContextType, MessageFlags } from 'discord.js';
 import { setTickrate } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
 
@@ -44,11 +44,13 @@ export class TickrateCommand extends Command {
     if (containerAll.length === 0)
       return interaction.editReply(`Setting tickrate failed!\nLost container reference.`);
     const container = containerAll[0];
-    if (container!.Labels.discordBotAccessRole)
-      if (!interaction.member?.roles.cache.has(container!.Labels.discordBotAccessRole))
+    if (container!.Labels.discordBotAccessRole) {
+      const guildMember = interaction.member as GuildMember;
+      if (!guildMember.roles.cache.has(container!.Labels.discordBotAccessRole))
         return interaction.editReply(
           `Setting tickrate failed!\nYou don't have permissions on that headless.`
         );
+    }
     const tickrate = interaction.options.getNumber('tickrate', true);
     const response = await setTickrate(containerId, tickrate);
     if (!response.successful) {
