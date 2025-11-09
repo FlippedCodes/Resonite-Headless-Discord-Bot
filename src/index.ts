@@ -13,6 +13,7 @@ const client = new SapphireClient({
     GatewayIntentBits.GuildMessages,
     // GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildScheduledEvents,
     // GatewayIntentBits.MessageContent,
   ],
   // partials: [Partials.Message, Partials.Reaction],

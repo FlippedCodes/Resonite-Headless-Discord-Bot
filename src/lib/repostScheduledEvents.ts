@@ -1,0 +1,113 @@
+import config from '../../config.json';
+import { container } from '@sapphire/framework';
+import {
+  EmbedBuilder,
+  GuildScheduledEventStatus,
+  time,
+  TimestampStyles,
+  type Guild,
+  type GuildScheduledEvent,
+} from 'discord.js';
+
+export async function refreshScheduledEvents(guild: Guild) {
+  if (!config.discordEventMgmt.enabled)
+    return container.logger.debug(
+      'Event channel was suppose dto be updated, but feature is disabled.'
+    );
+  // check if guild is populated and is the correct guild to support
+  if (!guild) return;
+
+  // get event list channel
+  const mgmtGuild = config.discordEventMgmt.managedGuilds.find((g) => g.guildId);
+  if (!mgmtGuild) return;
+  const channel = await guild.channels.fetch(mgmtGuild.channelId);
+  if (!(channel && channel.isSendable()))
+    return container.logger.error("Couldn't find event-list channel", mgmtGuild);
+
+  // prepare array
+  const groupedEvents: GuildScheduledEvent[][] = Array.from({ length: 7 }, () => []);
+
+  // sort events after days with relevant data more accessible
+  const guildEvents = await guild.scheduledEvents.fetch();
+  guildEvents
+    // TS moment
+    .filter((event) => event.scheduledStartAt)
+    // sort list after starting timestamps for displaying the events in the correct order
+    .sort((a, b) => a.scheduledStartTimestamp! - b.scheduledStartTimestamp!)
+    // put every event into its own day
+    .forEach((event) => {
+      // Sunday = 0, Saturday = 6
+      const weekdayIndex = new Date(event.scheduledStartAt!).getUTCDay();
+
+      groupedEvents[weekdayIndex]!.push(event);
+    });
+
+  const weekdayNames = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  const embeds = groupedEvents
+    .map((weekdayEvents, i) => {
+      // create embed for each day. discord allows 10 embeds
+      const fields = weekdayEvents
+        .map((event) => {
+          // do not run
+          if (event.description === null) return null;
+          // remove extra title content that is not needed
+          const eventName = event.name
+            .replace('[F.E.] ', '')
+            .replace('[F.E] ', '')
+            .replace(/ \[Session \d\]/g, '');
+          let name = `${event.recurrenceRule ? '🔁' : ''} ${eventName} @ ${time(
+            event.scheduledStartAt!,
+            TimestampStyles.ShortTime
+          )}`;
+          const offsetSpaces = '-'.repeat(Math.round(name.length / 4));
+          const ongoingLabel =
+            event.status === GuildScheduledEventStatus.Active
+              ? `🟢 ${offsetSpaces} **_ONGOING_** ${offsetSpaces} 🟢\n`
+              : '';
+
+          // check, if event has teh same description as another one on the same day
+          const foundDup = weekdayEvents
+            .filter((dupEvent) => dupEvent.id !== event.id)
+            .filter((dupEvent) => dupEvent.description === event.description);
+          // set the duplicate to null and append the time from it to consolidate the event
+          const dup = foundDup[0];
+          if (dup) {
+            dup.description = null;
+            name += ` & ${time(dup.scheduledStartAt!, TimestampStyles.ShortTime)}`;
+          }
+
+          return {
+            name,
+            value: `${ongoingLabel}> ${event.description?.replaceAll('\n', '\n> ')}`,
+          };
+          // filter out events that have been consolidated
+        })
+        .filter((event) => event !== null);
+      // build embed message
+      if (fields.length === 0) return null;
+      const embed = new EmbedBuilder()
+        .setTitle(`${weekdayNames[i]}`)
+        .setColor(16762624)
+        .addFields([...fields])
+        .setTimestamp(weekdayEvents[0] ? weekdayEvents[0].scheduledStartAt! : null);
+      return embed;
+    })
+    .filter((event) => event !== null);
+
+  // clear out entire channel if there is no message object
+  // FIXME: has to be revised
+  // if (message && message.editable) return message = await message.edit({ embeds })
+  // send out message if no message object is found
+  await channel.bulkDelete(10);
+  // message =
+  await channel.send({ embeds });
+}
