@@ -27,5 +27,3 @@ if (process.env.NODE_ENV === 'development')
 
 // discord connect
 await client.login(process.env.DCtoken);
-if (!client.user) throw new Error('Unable to login the bot. Is the Discord token correct?');
-container.logger.info('Logged in as', client.user?.displayName);
