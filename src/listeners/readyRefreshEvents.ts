@@ -2,7 +2,7 @@ import { Listener } from '@sapphire/framework';
 
 import { type Client, Events } from 'discord.js';
 
-import { refreshScheduledEvents } from '../lib/repostScheduledEvents';
+import { refreshScheduledEvents } from '../lib/discordRepostScheduledEvents';
 
 import config from '../../config.json';
 

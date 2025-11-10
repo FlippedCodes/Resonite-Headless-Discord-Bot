@@ -2,7 +2,7 @@ import { Listener } from '@sapphire/framework';
 
 import { Events, GuildScheduledEvent } from 'discord.js';
 
-import { refreshScheduledEvents } from '../lib/repostScheduledEvents';
+import { refreshScheduledEvents } from '../lib/discordRepostScheduledEvents';
 
 export class GuildScheduledEventUpdate extends Listener<typeof Events.GuildScheduledEventUpdate> {
   public constructor(context: Listener.LoaderContext, options: Listener.Options) {

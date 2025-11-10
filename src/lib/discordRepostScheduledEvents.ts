@@ -74,7 +74,7 @@ export async function refreshScheduledEvents(guild: Guild) {
               ? `🟢 ${offsetSpaces} **_ONGOING_** ${offsetSpaces} 🟢\n`
               : '';
 
-          // check, if event has teh same description as another one on the same day
+          // check, if event has the same description as another one on the same day
           const foundDup = weekdayEvents
             .filter((dupEvent) => dupEvent.id !== event.id)
             .filter((dupEvent) => dupEvent.description === event.description);
