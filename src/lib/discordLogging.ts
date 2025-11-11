@@ -6,11 +6,12 @@ import {
   type GuildMember,
 } from 'discord.js';
 import { container } from '@sapphire/framework';
-import type { logSuccessType, container as containerType } from '../types';
+import type { container as containerType } from '../types';
+import { logType } from '../types';
 
 // function to log who ran what command
 export async function commandLog(
-  successType: logSuccessType,
+  successType: logType,
   channelId: containerType['Labels']['discordBotLogChannel'],
   interaction: CommandInteraction,
   customMessage?: string
@@ -30,17 +31,17 @@ export async function commandLog(
   let color: ColorResolvable;
   let description: string = `${guildMember} (${guildMember.id}) `;
   switch (successType) {
-    case 'error': {
+    case logType.error: {
       description += `command request failed.`;
       color = Colors.Red;
       break;
     }
-    case 'failed': {
+    case logType.failed: {
       description += `tried to run a command but doesn't have permissions.`;
       color = Colors.Orange;
       break;
     }
-    case 'success': {
+    case logType.success: {
       description += `successfully ran a command.`;
       color = Colors.Green;
       break;

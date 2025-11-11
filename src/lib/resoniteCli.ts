@@ -1,4 +1,4 @@
-import type { accessLevel, responseDefaultCommand, responseResoniteWorlds } from '../types';
+import type { responseDefaultCommand, responseResoniteWorlds, SessionAccessLevel } from '../types';
 import { attach } from './docker';
 
 export async function setTickrate(containerId: string, tickrate: number) {
@@ -45,7 +45,7 @@ export async function getActiveWorlds(containerId: string) {
         users: parseInt(users[1] || '-1'),
         activeUsers: parseInt(activeUsers[1] || '-1'),
         maxUsers: parseInt(maxUsers[1] || '-1'),
-        accessLevel: accessLevel[1] as accessLevel,
+        accessLevel: accessLevel[1] as SessionAccessLevel,
       };
     })
     .filter((entry) => entry !== null);

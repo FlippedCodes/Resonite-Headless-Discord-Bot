@@ -1,11 +1,17 @@
-export type accessLevel =
-  | 'Anyone'
-  | 'RegisteredUsers'
-  | 'FriendsOfFriends'
-  | 'Private'
-  | 'Contacts';
+export enum SessionAccessLevel {
+  Private = 'Private',
+  LAN = 'LAN',
+  Contacts = 'Contacts',
+  ContactsPlus = 'ContactsPlus',
+  RegisteredUsers = 'RegisteredUsers',
+  Anyone = 'Anyone',
+}
 
-export type logSuccessType = 'error' | 'failed' | 'success';
+export enum logType {
+  error = 'error',
+  failed = 'failed',
+  success = 'success',
+}
 
 export type container = {
   Id: string;

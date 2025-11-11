@@ -11,6 +11,7 @@ import {
 import { getActiveWorlds } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
 import { commandLog } from '../lib/discordLogging';
+import { logType } from '../types';
 
 export class RestartCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -47,7 +48,7 @@ export class RestartCommand extends Command {
     const guildMember = interaction.member as GuildMember;
     if (container.Labels.discordBotAccessRole) {
       if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) {
-        commandLog('failed', container.Labels.discordBotLogChannel, interaction);
+        commandLog(logType.failed, container.Labels.discordBotLogChannel, interaction);
         return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
       }
     }
@@ -55,12 +56,12 @@ export class RestartCommand extends Command {
     const response = await getActiveWorlds(containerId);
     if (!response.successful) {
       const err = `Getting Worlds Failed!\nResponse: ${response.response}`;
-      commandLog('error', container.Labels.discordBotLogChannel, interaction, err);
+      commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
       await interaction.editReply(err);
       throw new Error(err);
     }
     if (!(response.worlds && response.worlds.length !== 0)) {
-      commandLog('error', container.Labels.discordBotLogChannel, interaction, 'No open worlds.');
+      commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, 'No open worlds.');
       return interaction.editReply(
         'There are currently no open worlds.\nMaybe this headless is currently restarting?\n-# But this command also sometimes fails so try re-running it.'
       );
@@ -79,7 +80,7 @@ ${bold('Users')}: ${world.activeUsers} (${world.users - 1}) / ${world.maxUsers}
       .setAuthor({ name: container.Names[0]!.replace('/', '') })
       .setTitle('Active Sessions')
       .setFooter({ text: 'Headless user is not counted.' });
-    commandLog('success', container.Labels.discordBotLogChannel, interaction, 'Requested world status.');
+    commandLog(logType.success, container.Labels.discordBotLogChannel, interaction, 'Requested world status.');
     return interaction.editReply({ embeds: [embed] });
   }
 }
