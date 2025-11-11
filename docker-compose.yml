@@ -12,4 +12,5 @@ services:
   redis:
     image: redis
     restart: always
-    expose: 6379
+    expose:
+      - 6379
