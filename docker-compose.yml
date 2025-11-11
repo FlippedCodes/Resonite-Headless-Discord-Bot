@@ -8,3 +8,8 @@ services:
     environment:
       DCtoken: ${DCtoken}
       uptimeUrl: ${uptimeUrl}
+      redisHost: redis
+  redis:
+    image: redis
+    restart: always
+    expose: 6379

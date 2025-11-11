@@ -3,7 +3,8 @@ import {
   ApplicationCommandRegistries,
   LogLevel,
 } from '@sapphire/framework';
-
+import '@sapphire/plugin-hmr/register';
+import '@sapphire/plugin-scheduled-tasks/register';
 import { GatewayIntentBits } from 'discord.js';
 
 const client = new SapphireClient({
@@ -19,6 +20,8 @@ const client = new SapphireClient({
   logger: {
     level: process.env.NODE_ENV === 'development' ? LogLevel.Debug : LogLevel.Info,
   },
+  hmr: { enabled: process.env.NODE_ENV === 'development' },
+  tasks: { bull: { connection: { host: process.env.redisHost } } },
 });
 
 // TODO: Register all commands at Discord first. So we get all idHints
