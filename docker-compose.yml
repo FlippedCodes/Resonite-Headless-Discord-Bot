@@ -6,5 +6,5 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      DCtoken: ${DISCORD_BOT_TOKEN}
-
+      DCtoken: ${DCtoken}
+      uptimeUrl: ${uptimeUrl}

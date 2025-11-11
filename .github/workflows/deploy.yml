@@ -9,7 +9,8 @@ jobs:
     runs-on: thyratron
 
     env:
-      DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+      DCtoken: ${{ secrets.DISCORD_BOT_TOKEN }}
+      uptimeUrl: ${{ secrets.uptimeUrl }}
 
     steps:
       - uses: actions/checkout@v2
