@@ -104,10 +104,10 @@ export async function refreshScheduledEvents(guild: Guild) {
     .filter((event) => event !== null);
 
   // clear out entire channel if there is no message object
-  // FIXME: has to be revised
-  // if (message && message.editable) return message = await message.edit({ embeds })
+  const messages = await channel.messages.fetch({ limit: 10 });
+  const message = messages.find((message) => message.author.id === guild.client.id);
+  if (message && message.editable) return await message.edit({ embeds });
   // send out message if no message object is found
   await channel.bulkDelete(10);
-  // message =
   await channel.send({ embeds });
 }
