@@ -92,9 +92,12 @@ export async function refreshScheduledEvents(guild: Guild) {
       // build embed message
       if (fields.length === 0) return null;
       const timestamp = weekdayEvents[0] ? weekdayEvents[0].scheduledStartAt! : null;
+      let embedColor = 16762624;
+      if (new Date(timestamp!).getDay() === new Date().getDay()) embedColor = Colors.Green;
+      else if (new Date(timestamp!).getDay() < new Date().getDay()) embedColor = Colors.Grey;
       const embed = new EmbedBuilder()
         .setTitle(`${weekdayNames[i]}`)
-        .setColor(new Date(timestamp!).getDay() === new Date().getDay() ? Colors.Green : 16762624)
+        .setColor(embedColor)
         .addFields([...fields])
         .setTimestamp(timestamp);
       return embed;
