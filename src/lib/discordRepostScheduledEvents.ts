@@ -59,11 +59,8 @@ export async function refreshScheduledEvents(guild: Guild) {
         .map((event) => {
           // do not run
           if (event.description === null) return null;
-          // remove extra title content that is not needed
-          const eventName = event.name
-            .replace('[F.E.] ', '')
-            .replace('[F.E] ', '')
-            .replace(/ \[Session \d\]/g, '');
+          // remove extra info inside [] 
+          const eventName = event.name.replace(/\[[^\]]*\]\s*/g, '');
           let name = `${event.recurrenceRule ? '🔁' : ''} ${eventName} @ ${time(
             event.scheduledStartAt!,
             TimestampStyles.ShortTime
