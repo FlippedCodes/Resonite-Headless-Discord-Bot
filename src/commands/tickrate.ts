@@ -1,16 +1,17 @@
 import { Command } from '@sapphire/framework';
-import { GuildMember, InteractionContextType, MessageFlags } from 'discord.js';
+import { GuildMember, inlineCode, InteractionContextType, MessageFlags } from 'discord.js';
 import { setTickrate } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
 import config from '../../config.json';
 import { commandLog } from '../lib/discordLogging';
 import { logType } from '../types';
+import { getConfig } from '../lib/resoniteConfigFile';
 
 export class TickrateCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
     super(context, {
       ...options,
-      description: 'Changes the tickrate of all open worlds.',
+      description: 'Read or change the tickrate of all open worlds.',
     });
   }
 
@@ -28,13 +29,13 @@ export class TickrateCommand extends Command {
               .setAutocomplete(true)
               .setRequired(true)
           )
-          .addNumberOption((option) => 
+          .addNumberOption((option) =>
             option
               .setName('tickrate')
               .setMaxValue(config.headless.global.tickrateRange.max)
               .setMinValue(config.headless.global.tickrateRange.min)
               .setDescription('What tickrate do you want to set the headless on?')
-              .setRequired(true)
+              .setRequired(false)
           ),
       { idHints: ['1436170716805464186', '1436177225358508153'] }
     );
@@ -55,21 +56,38 @@ export class TickrateCommand extends Command {
         );
       }
     }
-    const tickrate = interaction.options.getNumber('tickrate', true);
-    const response = await setTickrate(containerId, tickrate);
-    if (!response.successful) {
-      const err = `Setting tickrate failed!\nResponse: ${response.response}`;
+    const tickrate = interaction.options.getNumber('tickrate', false);
+    if (tickrate) {
+      const response = await setTickrate(containerId, tickrate);
+      if (!response.successful) {
+        const err = `Setting tickrate failed!\nResponse: ${response.response}`;
+        commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
+        await interaction.editReply(err);
+        throw new Error(err);
+      }
+      const confirmMessage = 'Tick Rate Set!';
+      if (!response.response.includes(confirmMessage)) {
+        const err = 'Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Please try again...'
+        commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
+        return interaction.editReply(err);
+      }
+      commandLog(logType.success, container.Labels.discordBotLogChannel, interaction);
+      return interaction.editReply(confirmMessage);
+    }
+    const runningConfig = await getConfig(container);
+    if (!runningConfig.successful) {
+      const err = `Getting tickrate failed!\nResponse: ${runningConfig.response}`;
       commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
       await interaction.editReply(err);
       throw new Error(err);
     }
-    const confirmMessage = 'Tick Rate Set!';
-    if (!response.response.includes(confirmMessage)) {
-      const err = 'Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Please try again...'
+    const configuredTickrate = runningConfig.contents?.tickRate;
+    if (configuredTickrate === undefined) {
+      const err = 'Unable to find tickrate in config file.';
       commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
-      return interaction.editReply(err);
+      return await interaction.editReply(err);
     }
-    commandLog(logType.success, container.Labels.discordBotLogChannel, interaction, confirmMessage);
-    return interaction.editReply(confirmMessage);
+    commandLog(logType.success, container.Labels.discordBotLogChannel, interaction);
+    return interaction.editReply(`The current Tickrate is ${inlineCode(configuredTickrate.toString())}`);
   }
 }
