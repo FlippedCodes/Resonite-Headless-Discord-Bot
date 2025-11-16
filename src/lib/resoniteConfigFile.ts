@@ -5,7 +5,7 @@ async function getConfigPath(container: container): Promise<string | null> {
   // To make sure we get the correct config file for the correct headless. since in debug it runs outside of a container this function was split into two functions
   if (process.env.container) {
     const projectName = container.Labels['com.docker.compose.project'];
-    return projectName ? `../../${config.headless.global.dockerConfigFolder}/${projectName}.json` : null;
+    return projectName ? `${config.headless.global.dockerConfigFolder}/${projectName}.json` : null;
   }
   const foundMount = container.Mounts.find((mount) =>
     mount.Destination.toLocaleLowerCase().includes(config.headless.global.configFileName)
