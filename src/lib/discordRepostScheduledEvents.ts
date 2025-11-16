@@ -31,14 +31,13 @@ export async function refreshScheduledEvents(guild: Guild) {
   const guildEvents = await guild.scheduledEvents.fetch();
   guildEvents
     // TS moment
-    .filter((event) => event.scheduledStartAt)
+    .filter((event) => event.scheduledStartTimestamp)
     // sort list after starting timestamps for displaying the events in the correct order
     .sort((a, b) => a.scheduledStartTimestamp! - b.scheduledStartTimestamp!)
     // put every event into its own day
     .forEach((event) => {
       // Sunday = 0, Saturday = 6
-      const weekdayIndex = new Date(event.scheduledStartAt!).getUTCDay();
-
+      const weekdayIndex = new Date(event.scheduledStartTimestamp!).getUTCDay();
       groupedEvents[weekdayIndex]!.push(event);
     });
 
