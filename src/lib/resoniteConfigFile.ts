@@ -17,14 +17,28 @@ export async function getConfig(container: container) {
   const path = await getConfigPath(container);
   if (!path) return { successful: false, response: 'Path to config could not be found.' };
   const file = Bun.file(path);
-  const contents = (await file.json()) as HeadlessConfig;
-  if (
-    !(contents &&
-    contents.$schema ===
-      'https://raw.githubusercontent.com/Yellow-Dog-Man/JSONSchemas/main/schemas/HeadlessConfig.schema.json')
-  )
-    return { successful: false, response: 'Config file doesn\'t have a "$schema". Is it a headless config?' };
-  return { successful: true, contents };
+  if (file.bytes.length === 0)
+    return { successful: false, response: 'Path to config could not be found.' };
+  try {
+    const contents = (await file.json()) as HeadlessConfig;
+    if (
+      !(
+        contents &&
+        contents.$schema ===
+          'https://raw.githubusercontent.com/Yellow-Dog-Man/JSONSchemas/main/schemas/HeadlessConfig.schema.json'
+      )
+    )
+      return {
+        successful: false,
+        response: 'Config file doesn\'t have a "$schema". Is it a headless config?',
+      };
+    return { successful: true, contents };
+  } catch (error) {
+    return {
+        successful: false,
+        response: `Unable to parse config file:\n${error}`,
+      };
+  }
 }
 
 export async function writeConfig() {}
