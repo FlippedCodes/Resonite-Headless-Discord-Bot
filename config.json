@@ -1,6 +1,8 @@
 {
   "headless": {
     "global": {
+"configFileName": "config.json",
+      "dockerConfigFolder": "headlessConfig",
       "tickrateRange": {
         "min": 60,
         "max": 120

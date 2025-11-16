@@ -17,5 +17,8 @@ FROM base AS release
 COPY --from=install /usr/src/app/node_modules ./node_modules
 COPY . .
 
+# know when running in a container
+ENV container=true
+
 # run the app
 ENTRYPOINT [ "bun", "start"]
