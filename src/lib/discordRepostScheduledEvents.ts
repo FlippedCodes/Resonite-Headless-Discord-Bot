@@ -71,7 +71,7 @@ export async function refreshScheduledEvents(guild: Guild) {
           const offsetSpaces = '-'.repeat(Math.round(name.length / 4));
           const ongoingLabel =
             event.status === GuildScheduledEventStatus.Active
-              ? `🟢 ${offsetSpaces} **_ONGOING_** ${offsetSpaces} 🟢\n`
+              ? `${config.discordEventMgmt.ongoingEmoji} ${offsetSpaces} **_ONGOING_** ${offsetSpaces} ${config.discordEventMgmt.ongoingEmoji}\n`
               : '';
 
           // check, if event has the same description as another one on the same day

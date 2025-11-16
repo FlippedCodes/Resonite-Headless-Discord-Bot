@@ -1,7 +1,7 @@
 {
   "headless": {
     "global": {
-"configFileName": "config.json",
+      "configFileName": "config.json",
       "dockerConfigFolder": "headlessConfig",
       "tickrateRange": {
         "min": 60,
@@ -11,6 +11,7 @@
   },
   "discordEventMgmt": {
     "enabled": true,
+    "ongoingEmoji": "<a:ongoing_event:1439595597370884096>",
     "managedGuilds": [
       {
         "guildId": "935195760713171025",
