@@ -1,6 +1,7 @@
 import config from '../../config.json';
 import { container } from '@sapphire/framework';
 import {
+  Colors,
   EmbedBuilder,
   GuildScheduledEventStatus,
   time,
@@ -90,11 +91,12 @@ export async function refreshScheduledEvents(guild: Guild) {
         .filter((event) => event !== null);
       // build embed message
       if (fields.length === 0) return null;
+      const timestamp = weekdayEvents[0] ? weekdayEvents[0].scheduledStartAt! : null;
       const embed = new EmbedBuilder()
         .setTitle(`${weekdayNames[i]}`)
-        .setColor(16762624)
+        .setColor(new Date(timestamp!).getDay() === new Date().getDay() ? Colors.Green : 16762624)
         .addFields([...fields])
-        .setTimestamp(weekdayEvents[0] ? weekdayEvents[0].scheduledStartAt! : null);
+        .setTimestamp(timestamp);
       return embed;
     })
     .filter((event) => event !== null);

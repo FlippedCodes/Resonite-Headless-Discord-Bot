@@ -1,6 +1,6 @@
 {
   "name": "resonite-headless-discord-bot",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "module": "index.ts",
   "type": "module",
   "main": "src/index.js",
