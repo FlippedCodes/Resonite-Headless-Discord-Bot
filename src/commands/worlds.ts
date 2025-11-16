@@ -80,7 +80,7 @@ ${bold('Users')}: ${world.activeUsers} (${world.users - 1}) / ${world.maxUsers}
       .setAuthor({ name: container.Names[0]!.replace('/', '') })
       .setTitle('Active Sessions')
       .setFooter({ text: 'Headless user is not counted.' });
-    commandLog(logType.success, container.Labels.discordBotLogChannel, interaction, 'Requested world status.');
+    commandLog(logType.success, container.Labels.discordBotLogChannel, interaction);
     return interaction.editReply({ embeds: [embed] });
   }
 }
