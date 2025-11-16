@@ -17,7 +17,7 @@ export async function getConfig(container: container) {
   const path = await getConfigPath(container);
   if (!path) return { successful: false, response: 'Path to config could not be found.' };
   const file = Bun.file(path);
-  if (file.bytes.length === 0)
+  if (file.size === 0)
     return { successful: false, response: 'Path to config could not be found.' };
   try {
     const contents = (await file.json()) as HeadlessConfig;
