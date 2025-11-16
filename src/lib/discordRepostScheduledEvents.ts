@@ -37,7 +37,7 @@ export async function refreshScheduledEvents(guild: Guild) {
     // put every event into its own day
     .forEach((event) => {
       // Sunday = 0, Saturday = 6
-      const weekdayIndex = new Date(event.scheduledStartTimestamp!).getUTCDay();
+      const weekdayIndex = new Date(event.scheduledStartTimestamp!).getDate();
       groupedEvents[weekdayIndex]!.push(event);
     });
 
