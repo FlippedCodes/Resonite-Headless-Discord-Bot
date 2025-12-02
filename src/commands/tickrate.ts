@@ -46,7 +46,8 @@ export class TickrateCommand extends Command {
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
     const container = containerAll[0];
-    if (!container) return interaction.editReply(`Setting tickrate failed!\nLost container reference.`);
+    if (!container)
+      return interaction.editReply(`Setting tickrate failed!\nLost container reference.`);
     if (container.Labels.discordBotAccessRole) {
       const guildMember = interaction.member as GuildMember;
       if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) {
@@ -67,7 +68,8 @@ export class TickrateCommand extends Command {
       }
       const confirmMessage = 'Tick Rate Set!';
       if (!response.response.includes(confirmMessage)) {
-        const err = 'Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Please try again...'
+        const err =
+          'Unable to confirm set tickrate.\nMaybe this headless is currently restarting? Please try again...';
         commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
         return interaction.editReply(err);
       }
@@ -88,6 +90,8 @@ export class TickrateCommand extends Command {
       return await interaction.editReply(err);
     }
     commandLog(logType.success, container.Labels.discordBotLogChannel, interaction);
-    return interaction.editReply(`The current Tickrate is ${inlineCode(configuredTickrate.toString())}`);
+    return interaction.editReply(
+      `The current Tickrate is ${inlineCode(configuredTickrate.toString())}`
+    );
   }
 }
