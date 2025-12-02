@@ -5,7 +5,7 @@ import { get } from '../lib/docker';
 import config from '../../config.json';
 import { commandLog } from '../lib/discordLogging';
 import { logType } from '../types';
-import { getConfig } from '../lib/resoniteConfigFile';
+import { getConfig, writeConfig } from '../lib/resoniteConfigFile';
 
 export class TickrateCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
@@ -58,6 +58,13 @@ export class TickrateCommand extends Command {
       }
     }
     const runningConfig = await getConfig(container);
+    if (!(runningConfig.successful && runningConfig.contents)) {
+      const err = `Getting tickrate failed!\nResponse: ${runningConfig.response}`;
+      commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
+      await interaction.editReply(err);
+      throw new Error(err);
+    }
+
     const tickrate = interaction.options.getNumber('tickrate', false);
     if (tickrate) {
       const response = await setTickrate(containerId, tickrate);
@@ -77,14 +84,16 @@ export class TickrateCommand extends Command {
       const reply = `Tickrate set from ${inlineCode(
         runningConfig.contents?.tickRate?.toString() || 'unknown'
       )} to ${inlineCode(tickrate.toString())}`;
+      let newConfig = runningConfig.contents;
+      newConfig.tickRate = tickrate;
+      const configWriteStats = await writeConfig(container, newConfig);
+      if (!configWriteStats?.successful) {
+        const err = `Unable to write setting into static config! Tickrate might have been set tho.\nResponse: ${configWriteStats?.response}`;
+        commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
+        return interaction.editReply(err);
+      }
       commandLog(logType.success, container.Labels.discordBotLogChannel, interaction, reply);
       return interaction.editReply(reply);
-    }
-    if (!runningConfig.successful) {
-      const err = `Getting tickrate failed!\nResponse: ${runningConfig.response}`;
-      commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
-      await interaction.editReply(err);
-      throw new Error(err);
     }
     const configuredTickrate = runningConfig.contents?.tickRate;
     if (configuredTickrate === undefined) {

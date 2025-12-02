@@ -41,4 +41,16 @@ export async function getConfig(container: container) {
   }
 }
 
-export async function writeConfig() {}
+export async function writeConfig(container: container, newConfig: HeadlessConfig) {
+  const path = await getConfigPath(container);
+  if (!path) return { successful: false, response: 'Path to config could not be found.' };
+  try {
+    await Bun.write(path, JSON.stringify(newConfig, undefined, 2));
+    return { successful: true };
+  } catch (error) {
+    return {
+        successful: false,
+        response: `Unable to write config file:\n${error}`,
+      };
+  }
+}
