@@ -57,6 +57,7 @@ export class TickrateCommand extends Command {
         );
       }
     }
+    const runningConfig = await getConfig(container);
     const tickrate = interaction.options.getNumber('tickrate', false);
     if (tickrate) {
       const response = await setTickrate(containerId, tickrate);
@@ -73,10 +74,12 @@ export class TickrateCommand extends Command {
         commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
         return interaction.editReply(err);
       }
-      commandLog(logType.success, container.Labels.discordBotLogChannel, interaction);
-      return interaction.editReply(confirmMessage);
+      const reply = `Tickrate set from ${inlineCode(
+        runningConfig.contents?.tickRate?.toString() || 'unknown'
+      )} to ${inlineCode(tickrate.toString())}`;
+      commandLog(logType.success, container.Labels.discordBotLogChannel, interaction, reply);
+      return interaction.editReply(reply);
     }
-    const runningConfig = await getConfig(container);
     if (!runningConfig.successful) {
       const err = `Getting tickrate failed!\nResponse: ${runningConfig.response}`;
       commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
