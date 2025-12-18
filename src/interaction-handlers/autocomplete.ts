@@ -1,4 +1,8 @@
-import { InteractionHandler, InteractionHandlerTypes, ApplicationCommandRegistries } from '@sapphire/framework';
+import {
+  InteractionHandler,
+  InteractionHandlerTypes,
+  ApplicationCommandRegistries,
+} from '@sapphire/framework';
 import { get } from '../lib/docker';
 import type { AutocompleteInteraction, GuildMember } from 'discord.js';
 
@@ -21,9 +25,9 @@ export class AutocompleteHandler extends InteractionHandler {
     // TODO: name restart dynamic with class call
     const allowedCommands = [
       ApplicationCommandRegistries.acquire('restart').commandName,
-      ApplicationCommandRegistries.acquire('worlds').commandName,
-      ApplicationCommandRegistries.acquire('tickrate').commandName,
-    ]
+      ApplicationCommandRegistries.acquire('sessions').commandName,
+      ApplicationCommandRegistries.acquire('config').commandName,
+    ];
     if (!allowedCommands.includes(interaction.command?.name!)) return this.none();
 
     const headlessContainers = await get();
