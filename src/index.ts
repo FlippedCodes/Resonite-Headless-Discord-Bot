@@ -12,12 +12,9 @@ const client = new SapphireClient({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    // GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildScheduledEvents,
-    // GatewayIntentBits.MessageContent,
   ],
-  // partials: [Partials.Message, Partials.Reaction],
   logger: {
     level: process.env.NODE_ENV === 'development' ? LogLevel.Debug : LogLevel.Info,
   },
