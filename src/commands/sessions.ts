@@ -13,7 +13,7 @@ import { get } from '../lib/docker';
 import { commandLog } from '../lib/discordLogging';
 import { logType } from '../types';
 
-export class RestartCommand extends Command {
+export class SessionsCommand extends Command {
   public constructor(context: Command.LoaderContext, options: Command.Options) {
     super(context, {
       ...options,
@@ -43,13 +43,16 @@ export class RestartCommand extends Command {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const containerId = interaction.options.getString('headlessname', true);
     const containerAll = await get(containerId);
-    const container = containerAll[0]
-    if (!container) return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
+    const container = containerAll[0];
+    if (!container)
+      return interaction.editReply(`Getting Worlds Failed!\nLost container reference.`);
     const guildMember = interaction.member as GuildMember;
     if (container.Labels.discordBotAccessRole) {
       if (!guildMember.roles.cache.has(container.Labels.discordBotAccessRole)) {
         commandLog(logType.failed, container.Labels.discordBotLogChannel, interaction);
-        return interaction.editReply(`Getting Worlds Failed!\nYou don't have permissions on that headless.`);
+        return interaction.editReply(
+          `Getting Worlds Failed!\nYou don't have permissions on that headless.`
+        );
       }
     }
 
@@ -61,7 +64,12 @@ export class RestartCommand extends Command {
       throw new Error(err);
     }
     if (!(response.worlds && response.worlds.length !== 0)) {
-      commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, 'No open worlds.');
+      commandLog(
+        logType.error,
+        container.Labels.discordBotLogChannel,
+        interaction,
+        'No open worlds.'
+      );
       return interaction.editReply(
         'There are currently no open worlds.\nMaybe this headless is currently restarting?\n-# But this command also sometimes fails so try re-running it.'
       );
