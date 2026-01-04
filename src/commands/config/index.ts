@@ -19,6 +19,7 @@ export class ParentCommand extends Subcommand {
       ...options,
       name: 'config',
       description: 'Change headless specific configurations.',
+			// preconditions: [],
     });
   }
 
@@ -37,21 +38,11 @@ export class ParentCommand extends Subcommand {
           .setContexts([InteractionContextType.Guild]);
       },
       { idHints: ['1436170716805464186'] }
-        // builder
-        //   .setName(this.name)
-        //   .setDescription(this.description)
-        //   .setContexts([InteractionContextType.Guild])
         //   .addSubcommand((subcommand) => 
         //     subcommand
         //       .setName('change_world')
         //       .setDescription('Change the tickrate for the whole headless.')
-        //       .addStringOption((option) =>
-        //         option
-        //           .setName('headlessname')
-        //           .setDescription('Which headless do you want to see the open worlds on?')
-        //           .setAutocomplete(true)
-        //           .setRequired(true)
-        //       )
+
         //       .addStringOption((option) =>
         //         option
         //           .setName('session_name')
@@ -59,34 +50,7 @@ export class ParentCommand extends Subcommand {
         //           .setAutocomplete(true)
         //           .setRequired(false)
         //       )
-        //       .addStringOption((option) =>
-        //         option
-        //           .setName('world_name')
-        //           .setDescription('What world do you want to use?')
-        //           .setAutocomplete(true)
-        //           .setRequired(false)
-        //       )
         //   )
-        //   .addSubcommand((subcommand) =>
-        //     subcommand
-        //       .setName('change_tickrate')
-        //       .setDescription('Change the tickrate for the whole headless.')
-        //       .addStringOption((option) =>
-        //         option
-        //           .setName('headlessname')
-        //           .setDescription('Which headless do you want to change the tickrate on?')
-        //           .setAutocomplete(true)
-        //           .setRequired(true)
-        //       )
-        //       .addNumberOption((option) =>
-        //         option
-        //           .setName('tickrate')
-        //           .setMaxValue(config.headless.global.tickrateRange.max)
-        //           .setMinValue(config.headless.global.tickrateRange.min)
-        //           .setDescription('What tickrate do you want to set the headless on?')
-        //           .setRequired(false)
-        //       )
-        //   ),
     );
   }
 }
