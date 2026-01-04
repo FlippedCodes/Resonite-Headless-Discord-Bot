@@ -1,0 +1,18 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "fullconfig",
+        "headlessname",
+        "kaname",
+        "Mgmt",
+        "repost",
+        "resrec",
+        "sessionname",
+        "worldname"
+    ],
+    "ignoreWords": [],
+    "import": []
+}
