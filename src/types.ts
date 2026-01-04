@@ -45,6 +45,7 @@ export type container = {
     discordBot: string;
     discordBotAccessRole: string;
     discordBotLogChannel: string | null;
+    discordBotWorldListChannel: string | null;
     'com.docker.compose.project': string | null;
   };
   State: 'exited' | 'created' | 'running';
