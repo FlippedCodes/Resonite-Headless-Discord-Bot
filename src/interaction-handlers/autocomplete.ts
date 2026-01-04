@@ -28,8 +28,13 @@ export class AutocompleteHandler extends InteractionHandler {
       ApplicationCommandRegistries.acquire('sessions').commandName,
       ApplicationCommandRegistries.acquire('config').commandName,
     ];
-    if (!allowedCommands.includes(interaction.command?.name!)) return this.none();
+    if (!allowedCommands.includes(interaction.commandName)) return this.none();
 
+    // Get the focussed (current) option
+    const focusedOption = interaction.options.getFocused(true);
+
+    switch (focusedOption.name) {
+      case 'headlessname': {
     const headlessContainers = await get();
     const guildMember = interaction.member as GuildMember;
     return this.some(
