@@ -12,7 +12,7 @@ export async function setTickrate(containerId: string, tickrate: number) {
   // TODO: also update the config file
 }
 
-export async function getActiveWorlds(containerId: string) {
+export async function getActiveSessions(containerId: string) {
   let output = await attach(containerId, 'worlds');
 
   if (!output.successful) return output;

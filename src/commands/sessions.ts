@@ -8,7 +8,7 @@ import {
   type APIEmbedField,
   type RestOrArray,
 } from 'discord.js';
-import { getActiveWorlds } from '../lib/resoniteCli';
+import { getActiveSessions } from '../lib/resoniteCli';
 import { get } from '../lib/docker';
 import { commandLog } from '../lib/discordLogging';
 import { logType } from '../types';
@@ -56,7 +56,7 @@ export class SessionsCommand extends Command {
       }
     }
 
-    const response = await getActiveWorlds(containerId);
+    const response = await getActiveSessions(containerId);
     if (!response.successful) {
       const err = `Getting Worlds Failed!\nResponse: ${response.response}`;
       commandLog(logType.error, container.Labels.discordBotLogChannel, interaction, err);
