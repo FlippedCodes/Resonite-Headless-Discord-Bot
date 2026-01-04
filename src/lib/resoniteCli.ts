@@ -40,8 +40,13 @@ export async function getActiveSessions(containerId: string) {
       const sessionName = users[0]?.replace(/\[\d*\]/g, '').trim();
       if (!sessionName) return null;
 
+      const sessionIdArr = world.match(/\[(\d+)\]/) || null;
+      const sessionId = sessionIdArr ? sessionIdArr[1] : null;
+      if (!sessionId) return null;
+
       return {
-        sessionName: sessionName || 'Failed to Parse',
+        sessionId: Number(sessionId),
+        sessionName,
         users: parseInt(users[1] || '-1'),
         activeUsers: parseInt(activeUsers[1] || '-1'),
         maxUsers: parseInt(maxUsers[1] || '-1'),

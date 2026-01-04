@@ -60,6 +60,7 @@ export type responseResoniteWorlds = {
   successful: boolean;
   response: string;
   worlds?: {
+    sessionId: number;
     sessionName: string;
     users: number;
     activeUsers: number;
