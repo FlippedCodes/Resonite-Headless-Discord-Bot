@@ -10,7 +10,9 @@ import type { container as containerType } from '../types';
 
 // function to get information about one session.
 export async function getWorlds(dockerContainer: containerType, interaction?: CommandInteraction) {
-  const channelId = dockerContainer.Labels.discordBotWorldListChannel;
+  // TEMP: couldn't restart the container due to ongoing events and i was impatient to try prod.
+  // const channelId = dockerContainer.Labels.discordBotWorldListChannel;
+  const channelId = '1040278418173993070';
   if (!channelId) return { successful: false, response: 'No channel for a world list was set.' };
   // const guildMember = interaction.member as GuildMember;
   // FIXME: fetch is not working and never returns
