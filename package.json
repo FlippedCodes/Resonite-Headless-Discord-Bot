@@ -17,7 +17,6 @@
   "dependencies": {
     "@kaname-png/plugin-subcommands-advanced": "^2.5.0",
     "@sapphire/framework": "^5.4.0",
-    "@sapphire/plugin-hmr": "^3.0.2",
     "@sapphire/plugin-scheduled-tasks": "^10.0.4",
     "@sapphire/plugin-subcommands": "^7.0.1",
     "@sapphire/utilities": "^3.18.2",
