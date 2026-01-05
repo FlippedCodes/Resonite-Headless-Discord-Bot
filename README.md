@@ -16,9 +16,9 @@ A Discord bot to manage Docker Resonite headless servers without mods.
 
 ## Screenshots
 
-Restart & Logs            |  Session List   | Session Config
-:-------------------------:|:-------------------------:|:-------:
-![Restart Headless](./assets/screenshots/restart.png) ![Logs](./assets/screenshots/logs.png)   |  ![Session List](./assets/screenshots/sessionList.png) | ![Session Config](./assets/screenshots/sessionConfig.png)
+Restart & Logs                                                                               | Session List                                          | Session Config
+:-------------------------------------------------------------------------------------------:|:-----------------------------------------------------:|:-------:
+![Restart Headless](./assets/screenshots/restart.png) ![Logs](./assets/screenshots/logs.png) | ![Session List](./assets/screenshots/sessionList.png) | ![Session Config](./assets/screenshots/sessionConfig.png)
 
 [More Screenshots](https://github.com/FlippedCodes/Resonite-Headless-Discord-Bot/tree/main/assets)
 
