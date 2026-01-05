@@ -13,7 +13,7 @@ import {
 export async function refreshScheduledEvents(guild: Guild) {
   if (!config.discordEventMgmt.enabled)
     return container.logger.debug(
-      'Event channel was suppose dto be updated, but feature is disabled.'
+      'Event channel was supposed to be updated, but feature is disabled.'
     );
   // check if guild is populated and is the correct guild to support
   if (!guild) return;
