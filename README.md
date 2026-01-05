@@ -2,7 +2,7 @@
 
 A Discord bot to manage Docker Resonite headless servers without mods.
 
-> [!INFO]
+> [!NOTE]
 > The bot is intended to be used with Docker. See the [Resonite Wiki](https://wiki.resonite.com/Headless_server_software/Docker), how to setup a Headless with Docker.
 
 ## Features
@@ -54,7 +54,7 @@ Restart & Logs            |  Session List   | Session Config
 
 ### Install
 
-> [!INFO]
+> [!NOTE]
 > If you need help setting up this program, hit me up on Discord: `the.phil.`
 
 1. Invite your Bot to your Discord Guild/Server and make sure to create two channels and give it read and send permissions to them:
