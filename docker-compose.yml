@@ -7,7 +7,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/data/project/resonite-FE/config.json:/headlessConfig/resonite-fe.json"
     environment:
-      # Timezone required for events to be put into the correct days, if they have the day in the title.
+      # Timezone required for Discord events to be put into the correct day category, if they have the day in the title.
       TZ: Canada/Eastern
       DCtoken: ${DCtoken}
       uptimeUrl: ${uptimeUrl}
