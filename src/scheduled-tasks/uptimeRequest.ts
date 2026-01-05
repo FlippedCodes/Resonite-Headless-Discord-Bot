@@ -11,6 +11,7 @@ export class IntervalTask extends ScheduledTask {
   public async run() {
 		if (process.env.NODE_ENV === 'development') return;
 		const url = process.env.uptimeUrl as string;
+    if (!url) return;
     fetch(url.replace('{ping}', this.container.client.ws.ping.toString()));
   }
 }
