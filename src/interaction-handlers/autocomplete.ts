@@ -57,7 +57,6 @@ export class AutocompleteHandler extends InteractionHandler {
         const containerId = interaction.options.getString('headlessname', true);
         if (!containerId) return this.none();
         const containerAll = await get(containerId);
-        console.log(containerAll);
         const container = containerAll[0];
         if (!container) return this.none();
 
