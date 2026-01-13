@@ -109,7 +109,7 @@ export class AutocompleteHandler extends InteractionHandler {
               !world?.disabled &&
               world?.displayName &&
               // check if world tags fit
-              world.tags?.some((item) => worldSettings?.tags?.includes(item))
+              world.tags?.some((item) => worldSettings?.tags?.map((tag) => tag?.toLocaleLowerCase()).includes(item.toLocaleLowerCase()))
           )
           .map((world) => ({
             name: `${world?.displayName?.replaceAll(/<[^>]+>/gm, '')}${
