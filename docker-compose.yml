@@ -6,6 +6,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/data/project/resonite-FE/config.json:/headlessConfig/resonite-fe.json"
+      - "/data/project/resonite-FE-CFF/config.json:/headlessConfig/resonite-fe-cff.json"
       - "/data/project/resonite-furbulous/config.json:/headlessConfig/resonite-furbulous.json"
     environment:
       # Timezone required for Discord events to be put into the correct day category, if they have the day in the title.
