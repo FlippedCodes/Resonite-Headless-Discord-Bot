@@ -19,7 +19,7 @@ export async function refreshScheduledEvents(guild: Guild) {
   if (!guild) return;
 
   // get event list channel
-  const mgmtGuild = config.discordEventMgmt.managedGuilds.find((g) => g.guildId);
+  const mgmtGuild = config.discordEventMgmt.managedGuilds.find((g) => g.guildId === guild.id);
   if (!mgmtGuild) return;
   const channel = await guild.channels.fetch(mgmtGuild.channelId);
   if (!(channel && channel.isSendable()))
