@@ -10,6 +10,7 @@ services:
       - "/data/project/resonite-FE-meditation/config.json:/headlessConfig/resonite-fe-meditation.json"
       - "/data/project/resonite-FE-fitness/config.json:/headlessConfig/resonite-fe-fitness.json"
       - "/data/project/resonite-furbulous/config.json:/headlessConfig/resonite-furbulous.json"
+      - "/data/project/resonite-MPAW/config.json:/headlessConfig/resonite-mpaw.json"
     environment:
       # Timezone required for Discord events to be put into the correct day category, if they have the day in the title.
       TZ: Canada/Eastern
