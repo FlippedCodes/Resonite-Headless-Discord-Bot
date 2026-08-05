@@ -63,13 +63,13 @@ Restart & Logs                                                                  
 2. Create a role for permission management, of who can use the bot.
 3. Open the docker compose of your Resonite Headless with your editor of choice (vi/nano/...), add the following labels and adjust the values to their description. [Make sure you have Discord developer mode enabled to get the Discord IDs.](https://cybrancee.com/learn/knowledge-base/how-to-enable-developer-mode-on-discord/)
 
-   1. ```yaml
+    ```yaml
       labels:
         discordBot: true
         discordBotAccessRole: 0000000000000000000
         discordBotLogChannel: 0000000000000000000
         discordBotWorldListChannel: 0000000000000000000
-      ```
+    ```
 
 4. Download this repo: `git clone https://github.com/FlippedCodes/Resonite-Headless-Discord-Bot`
 5. Copy `dist.env` to `.env`: `cp dist.env .env`
@@ -87,7 +87,7 @@ Restart & Logs                                                                  
       4. You can use the the `resonite-fe` mapping as an example. But this should be removed, before saving the file, cause that one is my mapping and doesn't exist on your system.
    2. Change your [timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
       1. Thi sis only required, if you use the `discordEventMgmt`-feature
-9. Startup your services: `docker compose up -d`
+9.  Startup your services: `docker compose up -d`
 10. ????
 11. Check the logs for, if the startup was successful: `docker compose logs -f`
 12. PROFIT!!!!
